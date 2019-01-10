@@ -5,6 +5,8 @@ public class Produto {
 	private double preco;
 	private int qtde;
 	
+	public static final String SEPARATOR = ";";
+	
 	public Produto () {
 	}
 
@@ -18,12 +20,9 @@ public class Produto {
 		
 	}
 	
-	public void gerarTotais() {
-			
-	}
 	
 	public String toString() {
-		return this.nome + "," + String.format("%.2f",this.preco) + "," + this.qtde;			
+		return this.nome + SEPARATOR + String.format("%.2f",this.preco) + SEPARATOR + this.qtde;			
 	}
 	
 }
