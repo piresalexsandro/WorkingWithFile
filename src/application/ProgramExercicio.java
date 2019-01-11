@@ -24,8 +24,9 @@ public class ProgramExercicio {
 	
 		System.out.print("Entre com a quantidade de produtos: ");
 		int n = sc.nextInt();
+		int countLine = 0;
 		
-		// colocando em lista o que foi digitado
+		// ************************************   colocando em lista o que foi digitado
 		for(int i=0; i<n; i++) {
 			System.out.print("Nome..: ");
 			String nome = sc.next();
@@ -38,18 +39,17 @@ public class ProgramExercicio {
 			produtos.add(p);
 	    }
 		
-		//Criando e gravando arquivo
-		String path = "C:\\Users\\2102254255\\eclipse-workspace\\temp\\ArquivoDeProdutos.txt";
-		File file = new File(path);
+		//************************************   Criando e gravando arquivo
+		String pathIn = "C:\\Users\\2102254255\\eclipse-workspace\\temp\\ArquivoDeProdutos.txt";
+		File fileIn = new File(pathIn);
 		try {
-			file.createNewFile();
+			fileIn.createNewFile();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 		// gravando arquivo
-		try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
-			int countLine = 0;
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileIn))) {
+			//int countLine = 0;
 			for (Produto produto : produtos) {
 				bw.write(produto.toString());
 				
@@ -60,40 +60,44 @@ public class ProgramExercicio {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		
 		//lendo e sumarizando e gerando arquivo conforme regra
 		try {
-			fr = new FileReader(path);
+			fr = new FileReader(pathIn);
 			br = new BufferedReader(fr);
 			
 			String line = br.readLine();
+			String pathOut = "C:\\Users\\2102254255\\eclipse-workspace\\temp\\ArquivoConsolidadoDeProdutos.txt";
+			File fileOut = new File(pathOut);
+			try {
+				fileOut.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	
+			
+			countLine = 0;		
 			
 			while(line  != null) {
-				//System.out.println(line);
-				
-				//split
-				String[] retornoSplit = line.split(Produto.SEPARATOR);
-				double tot = totais(Double.valueOf(retornoSplit[1]), Integer.valueOf(retornoSplit[2]));
-				String[] lines = new String[] {retornoSplit[0], Produto.SEPARATOR, String.valueOf(tot)};
-				String path1 = "C:\\Users\\2102254255\\eclipse-workspace\\temp\\ArquivoConsolidadoDeProdutos.txt";
-				File file1 = new File(path1);
-				try {
-					file1.createNewFile();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				
-				// gravando arquivo
-				try (BufferedWriter bw = new BufferedWriter(new FileWriter(file1))) {
-					int countLine = 0;
+				try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileOut))) {
+					String[] retornoSplit = line.split(Produto.SEPARATOR);
+					double tot = totais(Double.valueOf(retornoSplit[1]), Integer.valueOf(retornoSplit[2]));
+					String[] lines = new String[] {retornoSplit[0], Produto.SEPARATOR, String.valueOf(tot)};
+					
 					for (String line1 : lines) {
 						bw.write(line1);
-						countLine++;
-						if (countLine < n)
-						   bw.newLine();
+					}
+					
+					bw.write('\n');
+					
+					countLine++;
+					if (countLine < n) {
+						bw.newLine();
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+								
 				line = br.readLine();
 			}
 		}
@@ -118,10 +122,4 @@ public class ProgramExercicio {
 	public static double  totais(double preco, int qtde) {
 		return preco * qtde;
 	}
-
-	
-	/*public static void gravarSaida() {
-		return preco * qtde;
-	}*/
-
 }
